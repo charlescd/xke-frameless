@@ -20,7 +20,7 @@ object Exercice3 {
     val winnerUDF = udf(winner)
 
     matchs
-      .withColumn("winner", winnerUDF(col("player"), col("player2"), col("score")))
+      .withColumn("winner", winnerUDF(col("player1"), col("player2"), col("score")))
       .select("winner")
       .distinct()
       .collect()
@@ -29,7 +29,15 @@ object Exercice3 {
 
 
   def selectWinnerTyped(matchs: Dataset[Match]): Seq[String] = {
-    ???
+    val typedMatchs = TypedDataset.create(matchs)
+
+    val winnerUDF = typedMatchs.makeUDF(winner)
+
+    typedMatchs
+      .select(winnerUDF(typedMatchs('player1), typedMatchs('player2), typedMatchs('score)))
+      .distinct
+      .collect()
+      .run()
 
   }
 }
