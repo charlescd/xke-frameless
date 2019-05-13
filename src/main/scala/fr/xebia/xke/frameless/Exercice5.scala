@@ -27,8 +27,8 @@ object Exercice5 extends App {
 
 
   def encoders() = {
-    val ds = spark.createDataset(Seq(DateRange(OffsetDateTime.now(), OffsetDateTime.now())))
-    ds.show()
+//    val ds = spark.createDataset(Seq(DateRange(OffsetDateTime.now(), OffsetDateTime.now())))
+//    ds.show()
   }
 
   def encodersTyped() = {
@@ -36,10 +36,20 @@ object Exercice5 extends App {
     //    ds.show().run()
   }
 
-  ???
+  implicit lazy val charToStringInjection: Injection[Character, String] = new Injection[Character, String] {
+    override def apply(a: Character): String = a match {
+      case Dong => "Dong"
+      case Gato => "Gato"
+    }
+
+    override def invert(b: String): Character = b match {
+      case "Dong" => Dong
+      case "Gato" => Gato
+    }
+  }
 
   def encodersTyped2() = {
-//    val ds = TypedDataset.create(Seq(MainChar("Charles", Dong)))
-//    ds.show().run()
+    val ds = TypedDataset.create(Seq(MainChar("Charles", Dong)))
+    ds.show().run()
   }
 }

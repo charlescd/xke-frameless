@@ -18,5 +18,5 @@ object Garou {
 
   case object Gato extends Character
 
-  case class MainChar(player: String, char: Character)
+  case class MainChar(player: String, character: Character)
 }
